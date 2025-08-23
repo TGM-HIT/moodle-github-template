@@ -1,0 +1,27 @@
+children:
+- mod: $section
+  course: &COURSE 2
+  section: 1
+  summary:
+    source: section.md
+- mod: assign
+  course: *COURSE
+  cmid: 2
+  intro:
+    source: assign.md
+- mod: folder
+  course: *COURSE
+  cmid: 3
+  files:
+    file.txt: folder/file.txt
+    subfolder/subfile.txt: folder/subfolder/subfile.txt
+- label.md
+- mod: page
+  course: *COURSE
+  cmid: 5
+  page:
+    source: page.typ
+- mod: resource
+  course: *COURSE
+  cmid: 6
+  file: resource.txt
