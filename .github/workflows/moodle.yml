@@ -1,0 +1,39 @@
+name: Upload to Moodle
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  MOODLE_BASE_URL: https://elearning.tgm.ac.at/
+
+jobs:
+  upload:
+    name: Upload changed resources to Moodle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      - name: Install Moodle CLI
+        run: |
+          uv tool install git+https://github.com/TGM-HIT/moodle-cli@v0.2
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # fetch whole history so we can diff with the before state
+          fetch-depth: 0
+      - name: Get changes
+        if: github.event_name == 'push'
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changes.txt
+      - name: Upload
+        env:
+          MOODLE_TOKEN: ${{ secrets.MOODLE_TOKEN }}
+          TYPST_ROOT: .
+        run: |
+          if [ -f changes.txt ]; then
+              CHANGES='--changes changes.txt'
+          else
+              CHANGES=''
+          fi
+          mdl upload $CHANGES course.yaml
