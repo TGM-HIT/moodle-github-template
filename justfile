@@ -1,7 +1,7 @@
 # specify MOODLE_TOKEN in there
 set dotenv-load := true
 
-export MOODLE_BASE_URL := 'https://elearning.tgm.ac.at/'
+export MOODLE_BASE_URL := 'http://localhost:8000/'
 export TYPST_ROOT := justfile_directory()
 
 
